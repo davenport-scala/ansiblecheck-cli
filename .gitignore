@@ -1,0 +1,8 @@
+target/
+
+# vim
+*.sw?
+.idea/
+
+# Ignore [ce]tags files
+tags
