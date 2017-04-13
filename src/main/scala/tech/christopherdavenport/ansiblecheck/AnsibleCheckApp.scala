@@ -6,16 +6,16 @@ object AnsibleCheckApp {
 
   def main(args: Array[String]): Unit = {
 
-    val currentLocation = "/home/davenpcm/Documents/AnsibleProjects/Roles/ansible-role-universal-java"
+    val currentLocation = "/home/davenpcm/Documents/AnsibleProjects/ansible-role-universal-java"
 
-    val systemdRunOpts = "--privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro"
+    val systemdRunOpts = "--volume=/sys/fs/cgroup:/sys/fs/cgroup:ro"
     val initRunOpts = ""
 
     val systemDInit = "/lib/systemd/systemd"
     val initInit = "/sbin/init"
 
-    val distribution = "archlinux"
-    val distributionVersion = "latest"
+    val distribution = args(0)
+    val distributionVersion = args(1)
 
     val containerName = s"ansiblecheck$distribution$distributionVersion"
 
@@ -32,17 +32,17 @@ object AnsibleCheckApp {
 
     val stop = ansiblechecknative.system(docker.stop(containerName))
     println(s"Stop - Status Code - $stop")
-    val rm = ansiblechecknative.system(docker.rm(containerName))
+    val rm = ansiblechecknative.system(docker.rm(containerName, true))
     println(s"Rm   - Status Code - $rm")
   }
 
 }
 
-@extern
-object unistd{
-  def getcwd(ptr: Ptr[CChar], size: CSize): Ptr[CChar] = extern
+//@extern
+//object unistd{
+//  def getcwd(ptr: Ptr[CChar], size: CSize): Ptr[CChar] = extern
 
-}
+//}
 
 @extern
 object libc {
@@ -51,11 +51,11 @@ object libc {
 
 object ansiblechecknative {
   def system(string: String): Int = libc.system(toCString(string))
-  def getcwd(): String = {
-    val buffer = stackalloc[CChar](256)
-
-    unistd.getcwd(buffer, sizeof[CChar]).toString
-  }
+//  def getcwd(): String = {
+//    val buffer = stackalloc[C](256)
+//
+//    unistd.getcwd(buffer, sizeof(buffer)).toString
+//  }
 }
 
 object docker {

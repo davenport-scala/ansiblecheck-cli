@@ -6,6 +6,7 @@ scalaVersion := "2.11.8"
 
 enablePlugins(ScalaNativePlugin)
 
+nativeMode := "debug"
 ///*
 // * Compatibility version.  Use this to declare what version with
 // * which `master` remains in compatibility.  This is literally
